@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 namespace Timebox.Models
 {
     public class Task
@@ -26,7 +27,9 @@ namespace Timebox.Models
 
         [ForeignKey("UserId")]
         public string UserId { get; set; }
-        public User User { get; set; }
+
+        [JsonIgnore]
+        public User? User { get; set; }
     }
 
     public class Goal
@@ -40,7 +43,8 @@ namespace Timebox.Models
         [ForeignKey("TaskId")]
         public string TaskId { get; set; }
 
-        public Task Task { get; set; }
+        [JsonIgnore]
+        public Task? Task { get; set; }
     }
 }
 
