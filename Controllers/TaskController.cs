@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TimeboxTask = Timebox.Models.Task;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace Timebox.Controllers
@@ -8,6 +9,7 @@ namespace Timebox.Controllers
 
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class TaskController : ControllerBase
     {
         private readonly AppDbContext _context;

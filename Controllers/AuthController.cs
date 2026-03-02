@@ -21,14 +21,23 @@ namespace Timebox.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<User>> Register(User user)
+        public async Task<ActionResult<User>> Register(RegisterRequest request)
         {
-            user.PasswordHash = BCrypt.HashPassword(user.PasswordHash);
-
+            if (await _context.Users.AnyAsync(u => u.Email == request.Email))
+            {
+                return BadRequest("Email already in use");
+            }
+            var user = new User
+            {
+                Email = request.Email,
+                Username = request.Username,
+                PasswordHash = BCrypt.HashPassword(request.Password)
+            };
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
             return user;
+
         }
 
         [HttpPost("login")]
