@@ -46,6 +46,32 @@ namespace Timebox.Models
         [JsonIgnore]
         public Task? Task { get; set; }
     }
+
+    public class TaskCreateDto
+    {
+        [Required]
+        public string Description { get; set; }
+
+        [Required]
+        public int Duration { get; set; }
+
+        public List<Goal> Goals { get; set; } = new List<Goal>();
+    }
+
+    public class TaskUpdateDto
+    {
+        [Required]
+        public string Description { get; set; }
+
+        [Required]
+        public int Duration { get; set; }
+
+        public DateTime? StartedAt { get; set; }
+
+        public DateTime? CompletedAt { get; set; }
+
+        public List<Goal> Goals { get; set; } = new List<Goal>();
+    }
 }
 
 
