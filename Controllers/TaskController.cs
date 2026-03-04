@@ -58,10 +58,10 @@ namespace Timebox.Controllers
 
             var task = new TimeboxTask
             {
+                UserId = userId,
                 Description = taskDto.Description,
                 Duration = taskDto.Duration,
-                UserId = userId
-
+                Goals = taskDto.Goals
             };
             _context.Tasks.Add(task);
             await _context.SaveChangesAsync();
@@ -80,13 +80,30 @@ namespace Timebox.Controllers
                 return NotFound();
             }
 
+            //Handling goals update
+            var incomingGoalIds = updateTaskDto.Goals.Select(g => g.Id).ToList();
+            var goalsToRemove = task.Goals.Where(g => !incomingGoalIds.Contains(g.Id)).ToList();
+            _context.Goals.RemoveRange(goalsToRemove);
+
+            foreach (var incomingGoal in updateTaskDto.Goals)
+            {
+                var existingGoal = task.Goals.FirstOrDefault(g => g.Id == incomingGoal.Id);
+                if (existingGoal != null)
+                {
+                    existingGoal.Description = incomingGoal.Description;
+                    existingGoal.IsCompleted = incomingGoal.IsCompleted;
+                }
+                else
+                {
+                    incomingGoal.TaskId = task.Id;
+                    task.Goals.Add(incomingGoal);
+                }
+            }
+
             task.Description = updateTaskDto.Description;
             task.Duration = updateTaskDto.Duration;
             task.StartedAt = updateTaskDto.StartedAt;
             task.CompletedAt = updateTaskDto.CompletedAt;
-            task.Goals = updateTaskDto.Goals;
-
-            _context.Entry(task).State = EntityState.Modified;
 
             try
             {

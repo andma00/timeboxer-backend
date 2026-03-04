@@ -40,6 +40,8 @@ namespace Timebox.Models
         [Required]
         public string Description { get; set; }
 
+        public bool IsCompleted { get; set; } = false;
+
         [ForeignKey("TaskId")]
         public string TaskId { get; set; }
 
@@ -55,6 +57,7 @@ namespace Timebox.Models
         [Required]
         public int Duration { get; set; }
 
+        [Required]
         public List<Goal> Goals { get; set; } = new List<Goal>();
     }
 
